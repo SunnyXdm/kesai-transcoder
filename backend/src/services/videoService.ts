@@ -1,6 +1,5 @@
 import path from 'path';
 import fs from 'fs';
-import { $ } from 'zx';
 import { computeBlurHash } from '../utils/blurhash';
 import { logger } from '../utils/logger';
 import { DatabaseService } from './database';
@@ -59,6 +58,7 @@ export const VideoService = {
     async generateCoverThumbnail(inputFilePath: string, outputDir: string, duration: number): Promise<string> {
         const thumbnailTime = duration * 0.1;
         const coverThumbnailPath = path.join(outputDir, 'thumbnail.jpg');
+        const { $ } = await import('zx');
         await $`ffmpeg -y -ss ${thumbnailTime} -i ${inputFilePath} -vframes 1 -q:v 2 ${coverThumbnailPath}`;
         return coverThumbnailPath;
     },
@@ -77,6 +77,7 @@ export const VideoService = {
         const cols = 8;
         const rows = Math.ceil(numThumbs / cols);
         const storyboardPath = path.join(outputDir, 'storyboard.jpg');
+        const { $ } = await import('zx');
         await $`ffmpeg -y -i ${inputFilePath} -vf "fps=1/${interval},scale=${thumbWidth}:${thumbHeight},tile=${cols}x${rows}" -frames:v 1 ${storyboardPath}`;
 
         const vttLines: string[] = ['WEBVTT', ''];

@@ -1,4 +1,3 @@
-import { $ } from 'zx';
 import { logger } from './logger';
 
 /**
@@ -17,6 +16,7 @@ export interface ProbeResult {
  */
 export async function probeVideo(filePath: string): Promise<ProbeResult> {
     try {
+        const { $ } = await import('zx');
         const { stdout } = await $`ffprobe -v error -analyzeduration 100M -probesize 100M -print_format json -show_format -show_streams ${filePath}`;
         const probe = JSON.parse(stdout);
         if (!probe.streams || probe.streams.length === 0) {
