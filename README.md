@@ -1,4 +1,3 @@
-````markdown
 # Kesai Transcoder
 
 Kesai Transcoder is a production-grade video transcoding system engineered for robustness, maintainability, and scalability. It provides a comprehensive backend solution for processing video uploads, real-time transcoding (with multi-quality support), thumbnail and storyboard generation (with WebVTT integration), and live status updates via WebSocket (Socket.IO). The repository is organized into two main components:
@@ -54,7 +53,6 @@ Before setting up Kesai Transcoder, ensure you have the following installed on y
     ```bash
     cd backend
     ```
-````
 
 2. **Install dependencies:**
 
