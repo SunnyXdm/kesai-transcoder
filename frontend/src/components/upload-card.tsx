@@ -5,7 +5,7 @@ import { Upload, X, FileVideo } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { API_BASE_URL } from '@/lib/constants';
+import { API_URL } from '@/lib/constants';
 import type { UploadResponse } from '@/components/video-transcoder';
 
 export function UploadCard() {
@@ -52,7 +52,7 @@ export function UploadCard() {
 
 		try {
 			await axios.post<UploadResponse>(
-				`${API_BASE_URL}/upload`,
+				`${API_URL}/upload`,
 				formData,
 				{
 					headers: { 'Content-Type': 'multipart/form-data' },

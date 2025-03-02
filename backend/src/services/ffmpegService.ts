@@ -1,23 +1,16 @@
 import { spawn } from 'child_process';
+import { logger } from '../utils/logger';
 import { Server as SocketIOServer } from 'socket.io';
-import logger from '../logger';
 
 /**
- * Runs an ffmpeg command with progress tracking.
- * Emits progress events via Socket.IO.
- * @param args - Array of ffmpeg command arguments.
+ * Runs ffmpeg with provided arguments and progress tracking.
+ * @param args - ffmpeg arguments.
  * @param jobId - Job identifier.
  * @param quality - Quality preset being processed.
- * @param totalDuration - Total duration of the video (in seconds).
- * @param io - Socket.IO server instance.
+ * @param totalDuration - Total video duration in seconds.
+ * @param io - Socket.IO instance for progress updates.
  */
-export function runFfmpegWithProgress(
-    args: string[],
-    jobId: number,
-    quality: string,
-    totalDuration: number,
-    io: SocketIOServer
-): Promise<void> {
+export function runFfmpegWithProgress(args: string[], jobId: number, quality: string, totalDuration: number, io: SocketIOServer): Promise<void> {
     return new Promise((resolve, reject) => {
         logger.info(`Job ${jobId} [${quality}]: Running ffmpeg with args: ${args.join(' ')}`);
         const ffmpeg = spawn('ffmpeg', [...args, '-progress', 'pipe:1']);

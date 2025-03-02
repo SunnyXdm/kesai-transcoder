@@ -1,36 +1,29 @@
-// src/server.ts
-import express from 'express';
-import { createServer } from 'http';
+import http from 'http';
 import { Server as SocketIOServer } from 'socket.io';
-import cors from 'cors';
-import morgan from 'morgan';
-import path from 'path';
-import videoRoutes from './routes/videoRoutes';
-import { PORT, OUTPUT_DIR } from './config';
-import { resumePendingJobs } from './jobs/jobQueue';
-import logger from './logger';
+import app, { registerTranscodeRoutes } from './app';
+import { config } from './config/config';
+import { initSocketIO } from './services/socketService';
+import { resumePendingJobs } from './services/jobProcessor';
+import { logger } from './utils/logger';
+import fs from 'fs';
 
-const app = express();
-app.use(cors());
-app.use(morgan('dev'));
-app.use(express.json());
-app.use('/api', videoRoutes);
-app.use('/outputs', express.static(path.join(__dirname, OUTPUT_DIR)));
-
-const httpServer = createServer(app);
-const io = new SocketIOServer(httpServer, { cors: { origin: '*' } });
-app.set('io', io);
-
-io.on('connection', (socket) => {
-    logger.info('Client connected: %s', socket.id);
-    socket.on('disconnect', () => {
-        logger.info('Client disconnected: %s', socket.id);
-    });
+// Ensure upload and output directories exist.
+[config.uploadDir, config.outputDir].forEach(dir => {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 });
 
-// Resume any pending jobs from previous runs.
+const httpServer = http.createServer(app);
+const io = new SocketIOServer(httpServer, { cors: { origin: '*' } });
+
+// Register transcode routes (which require Socket.IO).
+registerTranscodeRoutes(io);
+
+// Initialize Socket.IO events.
+initSocketIO(io);
+
+// Resume pending jobs from the database on startup.
 resumePendingJobs(io);
 
-httpServer.listen(PORT, () => {
-    logger.info(`Transcoder service running at http://localhost:${PORT}`);
+httpServer.listen(config.port, () => {
+    logger.info(`Transcoder service running at http://localhost:${config.port}`);
 });

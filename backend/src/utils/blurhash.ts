@@ -1,12 +1,12 @@
 import fs from 'fs';
 import sharp from 'sharp';
 import { encode } from 'blurhash';
-import logger from '../logger';
+import { logger } from './logger';
 
 /**
- * Computes a blurhash string from an image file.
+ * Computes a blurhash for a given image file.
  * @param imagePath - Path to the image file.
- * @returns A blurhash string.
+ * @returns Blurhash string.
  */
 export async function computeBlurHash(imagePath: string): Promise<string> {
     try {
@@ -18,7 +18,7 @@ export async function computeBlurHash(imagePath: string): Promise<string> {
             .toBuffer({ resolveWithObject: true });
         return encode(new Uint8ClampedArray(data), info.width, info.height, 4, 3);
     } catch (error) {
-        logger.error('Error computing blurhash: %s', error);
+        logger.error('Error in computeBlurHash:', error);
         return '';
     }
 }

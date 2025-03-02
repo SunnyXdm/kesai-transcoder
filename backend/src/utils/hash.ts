@@ -1,15 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import { UPLOAD_DIR } from '../config';
-import logger from '../logger';
+import { config } from '../config/config';
+import { logger } from './logger';
 
 /**
- * Computes SHA-256 hash of a file and renames it to the hash plus its original extension.
- * If a file with the hashed name already exists, the duplicate is removed.
- * @param filePath - Path to the temporary uploaded file.
+ * Computes SHA-256 hash for a given file and renames it to the hash value.
+ * @param filePath - Path to the uploaded file.
  * @param originalName - Original filename.
- * @returns The new (hashed) filename.
+ * @returns Hashed filename.
  */
 export async function hashAndRenameFile(filePath: string, originalName: string): Promise<string> {
     try {
@@ -17,17 +16,16 @@ export async function hashAndRenameFile(filePath: string, originalName: string):
         const hash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
         const ext = path.extname(originalName);
         const newFilename = `${hash}${ext}`;
-        const newFilePath = path.join(UPLOAD_DIR, newFilename);
+        const newFilePath = path.join(config.uploadDir, newFilename);
         if (!fs.existsSync(newFilePath)) {
             await fs.promises.rename(filePath, newFilePath);
-            logger.info(`File renamed to ${newFilename}`);
         } else {
             await fs.promises.unlink(filePath);
-            logger.info('Duplicate file detected; removed temporary file.');
         }
+        logger.info(`File hashed and renamed to ${newFilename}`);
         return newFilename;
     } catch (error) {
-        logger.error('Error in hashAndRenameFile: %s', error);
+        logger.error('Error in hashAndRenameFile:', error);
         throw error;
     }
 }

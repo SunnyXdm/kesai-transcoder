@@ -2,3 +2,6 @@ dist
 .env
 node_modules
 npm-debug.log
+outputs
+uploads
+videos.db

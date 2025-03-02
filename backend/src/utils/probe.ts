@@ -1,11 +1,19 @@
 import { $ } from 'zx';
-import logger from '../logger';
-import { ProbeResult } from '../types';
+import { logger } from './logger';
 
 /**
- * Probes a video file using ffprobe with robust parameters.
+ * Result from probing a video file.
+ */
+export interface ProbeResult {
+    width: number;
+    height: number;
+    duration: number;
+}
+
+/**
+ * Probes a video file using ffprobe to extract metadata.
  * @param filePath - Path to the video file.
- * @returns A ProbeResult with width, height, and duration.
+ * @returns ProbeResult containing width, height, and duration.
  */
 export async function probeVideo(filePath: string): Promise<ProbeResult> {
     try {
@@ -23,7 +31,7 @@ export async function probeVideo(filePath: string): Promise<ProbeResult> {
         const duration = parseFloat(probe.format.duration);
         return { width, height, duration };
     } catch (error) {
-        logger.error('ffprobe error: %s', error);
+        logger.error('Error in probeVideo:', error);
         throw new Error('Failed to probe video file');
     }
 }
