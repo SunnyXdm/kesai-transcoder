@@ -30,10 +30,17 @@ export async function processJob(job: Job, io: SocketIOServer): Promise<void> {
     for (const quality of job.qualities) {
         const preset = qualityPresets[quality];
         const outputFile = path.join(job.outputDir, `${quality}.m3u8`);
-        const ffmpegArgs = [
+
+        // Build the FFmpeg arguments without any subtitle mapping.
+        const ffmpegArgs: string[] = [
             '-y',
+            '-probesize', '100M',           // Increase probe size for better stream analysis
+            '-analyzeduration', '100M',      // Increase analysis duration
             '-i', job.inputFilePath,
             '-reset_timestamps', '1',
+            '-sn',                         // Disable subtitle streams
+            '-map', '0:v',                 // Map only video stream
+            '-map', '0:a',                 // Map only audio stream
             '-c:v', 'libx264',
             '-preset', 'fast',
             '-b:v', preset.bitrate,
@@ -44,6 +51,7 @@ export async function processJob(job: Job, io: SocketIOServer): Promise<void> {
             '-hls_playlist_type', 'vod',
             outputFile
         ];
+
         try {
             logger.info(`Job ${job.id}: Transcoding quality ${quality}...`);
             await runFfmpegWithProgress(ffmpegArgs, job.id, quality, job.duration, io);
@@ -77,10 +85,7 @@ export async function processJob(job: Job, io: SocketIOServer): Promise<void> {
         status: 'completed'
     });
     io.emit('job-complete', { jobId: job.id, m3u8Url, thumbnailUrl });
-
-    // Broadcast the updated video list.
     broadcastVideoUpdate();
-
     logger.info(`Job ${job.id} processing completed.`);
 }
 
@@ -101,7 +106,6 @@ export async function processQueue(io: SocketIOServer): Promise<void> {
             logger.error(`Job ${job.id} failed:`, error);
             DatabaseService.updateVideo(job.id, { status: 'failed' });
             io.emit('job-failed', { jobId: job.id, error: (error as Error).message });
-            // Broadcast update after failure.
             broadcastVideoUpdate();
         }
     }
