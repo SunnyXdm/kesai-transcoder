@@ -39,7 +39,7 @@ The backend is designed using a modular architecture with clear separation of co
 Before setting up Kesai Transcoder, ensure you have the following installed on your system:
 
 -   **Node.js** (v14+)
--   **npm** (v6+)
+-   **pnpm** (v6+)
 -   **ffmpeg/ffprobe:** Must be installed and accessible via your system's PATH.
 -   **SQLite:** The backend uses SQLite (via Better SQLite3) for lightweight, file-based data storage.
 
@@ -57,24 +57,24 @@ Before setting up Kesai Transcoder, ensure you have the following installed on y
 2. **Install dependencies:**
 
     ```bash
-    npm install
+    pnpm install
     ```
 
 3. **Build the project (for production builds):**
 
     ```bash
-    npm run build
+    pnpm run build
     ```
 
 4. **Start the server:**
 
     - For development (with hot reloading):
         ```bash
-        npm run dev
+        pnpm run dev
         ```
     - For production:
         ```bash
-        npm start
+        pnpm start
         ```
 
     The backend server will run on the configured port (default is `3000`).
@@ -90,13 +90,13 @@ Before setting up Kesai Transcoder, ensure you have the following installed on y
 2. **Install dependencies:**
 
     ```bash
-    npm install
+    pnpm install
     ```
 
 3. **Start the frontend application:**
 
     ```bash
-    npm start
+    pnpm start
     ```
 
     The frontend application will typically run on a different port (e.g., `3001`), and it is configured to interact with the backend API and WebSocket endpoints.
