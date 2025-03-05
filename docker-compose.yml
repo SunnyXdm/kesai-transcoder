@@ -5,7 +5,7 @@ services:
         build:
             context: ./frontend
             dockerfile: Dockerfile
-        container_name: frontend
+        container_name: kesai-transcoder-frontend
         networks:
             - kesai-transcoder
         expose:
@@ -15,7 +15,7 @@ services:
         build:
             context: ./backend
             dockerfile: Dockerfile
-        container_name: backend
+        container_name: kesai-transcoder-backend
         networks:
             - kesai-transcoder
         expose:
@@ -23,10 +23,10 @@ services:
 
     kesai-transcoder-reverse-proxy:
         image: nginx:stable-alpine
-        container_name: reverse-proxy
+        container_name: kesai-transcoder-reverse-proxy
         depends_on:
-            - frontend
-            - backend
+            - kesai-transcoder-frontend
+            - kesai-transcoder-backend
         ports:
             - '4000:80'
         volumes:
