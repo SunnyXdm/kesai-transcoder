@@ -14,18 +14,30 @@ Kesai Transcoder is a video transcoding backend built with Node.js and TypeScrip
 1. **Clone the repository and install dependencies:**
 
    ```bash
-   git clone https://github.com/yourusername/kesai-transcoder.git
+   git clone https://github.com/sunnyxdm/kesai-transcoder.git
    cd kesai-transcoder/backend
    pnpm install
+   cd ../frontend
+   pnpm install
    ```
+
 
 2. **Start the server:**
 
    For development:
    ```bash
+   cd backend
    pnpm run dev
    ```
    (The server listens on port 3000 by default.)
+
+2. **Start the frontend:**
+
+   For development:
+   ```bash
+   cd backend
+   pnpm run dev
+   ```
 
 ## Running with Docker Compose
 
