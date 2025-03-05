@@ -13,7 +13,7 @@ import fs from 'fs';
 });
 
 const httpServer = http.createServer(app);
-const io = new SocketIOServer(httpServer, { cors: { origin: '*' } });
+const io = new SocketIOServer(httpServer, { cors: { origin: '*' }, path: '/socket.io' });
 
 // Register transcode routes (which require Socket.IO).
 registerTranscodeRoutes(io);
