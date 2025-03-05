@@ -12,7 +12,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // Serve static files for outputs.
-app.use('/outputs', express.static(config.outputDir));
+// app.use('/outputs', express.static(config.outputDir));
 
 // Register video routes.
 app.use('/api', videoRoutes);
