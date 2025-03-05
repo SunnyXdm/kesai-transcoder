@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { io, type Socket } from 'socket.io-client';
 import { UploadCard } from '@/components/upload-card';
 import { VideoCard } from '@/components/video-card';
-import { API_URL, SOCKET_URL } from '@/lib/constants';
+import { API_URL, BASE_URL } from '@/lib/constants';
 
 // Type definitions
 export interface UploadResponse {
@@ -45,7 +45,10 @@ export function VideoTranscoder() {
 
 	useEffect(() => {
 		// Initialize Socket.IO connection
-		const sock: Socket = io(SOCKET_URL);
+		const sock: Socket = io(
+			BASE_URL
+			// { path: '/socket.io', forceNew: true }
+		);
 
 		// Socket event handlers
 		sock.on('connect', () => {

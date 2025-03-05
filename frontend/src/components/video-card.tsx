@@ -34,7 +34,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { API_URL, BASE_URL } from '@/lib/constants';
+import { BASE_URL } from '@/lib/constants';
 import { toast } from 'sonner';
 
 interface VideoCardProps {
@@ -119,7 +119,9 @@ export function VideoCard({ video, onTranscode, progress }: VideoCardProps) {
 
 	const getStreamUrl = () => {
 		if (!video.m3u8Url) return '';
-		return `${API_URL}${video.m3u8Url}`;
+		return `${BASE_URL ? BASE_URL : window.location.origin}${
+			video.m3u8Url
+		}`;
 	};
 
 	// Handle copying URL based on environment
