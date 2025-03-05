@@ -41,50 +41,6 @@ Kesai Transcoder is a video transcoding backend built with Node.js and TypeScrip
 
 ## Running with Docker Compose
 
-Ensure you have a `docker-compose.yml` file similar to the following in your project root:
-
-```yaml
-version: '3.8'
-
-services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend
-    networks:
-      - app-network
-    expose:
-      - '80'
-
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: backend
-    networks:
-      - app-network
-    expose:
-      - '80'
-
-  reverse-proxy:
-    image: nginx:stable-alpine
-    container_name: reverse-proxy
-    depends_on:
-      - frontend
-      - backend
-    ports:
-      - '4000:80'
-    volumes:
-      - ./nginx-reverse-proxy.conf:/etc/nginx/conf.d/default.conf:ro
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge
-```
-
 To build and run the entire stack, simply execute:
 
 ```bash
