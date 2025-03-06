@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
     kesai-transcoder-frontend:
         build:
@@ -8,8 +6,6 @@ services:
         container_name: kesai-transcoder-frontend
         networks:
             - kesai-transcoder
-        expose:
-            - '80'
 
     kesai-transcoder-backend:
         build:
@@ -18,8 +14,6 @@ services:
         container_name: kesai-transcoder-backend
         networks:
             - kesai-transcoder
-        expose:
-            - '80'
 
     kesai-transcoder-reverse-proxy:
         image: nginx:stable-alpine
