@@ -2,6 +2,10 @@
 
 Kesai Transcoder is a video transcoding backend built with Node.js and TypeScript. It handles video uploads, probes files with ffprobe, transcodes videos into multiple quality presets, generates thumbnails and storyboards (with WebVTT previews), and sends real-time updates via Socket.IO.
 
+![Uploading](screenshots/uploading.png)
+![Qualities](screenshots/qualities.png)
+![Transcoding](screenshots/transcoding.png)
+
 ## Prerequisites
 
 - Node.js (v14+)
@@ -44,7 +48,7 @@ Kesai Transcoder is a video transcoding backend built with Node.js and TypeScrip
 To build and run the entire stack, simply execute:
 
 ```bash
-docker-compose up --build
+docker compose up
 ```
 
 Then access the application at: [http://localhost:4000](http://localhost:4000)
