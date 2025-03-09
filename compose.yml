@@ -1,26 +1,30 @@
 services:
-    kesai-transcoder-frontend:
+    frontend:
         build:
             context: ./frontend
             dockerfile: Dockerfile
-        container_name: kesai-transcoder-frontend
+        container_name: frontend
         networks:
             - kesai-transcoder
 
-    kesai-transcoder-backend:
+    backend:
         build:
             context: ./backend
             dockerfile: Dockerfile
-        container_name: kesai-transcoder-backend
+        container_name: backend
         networks:
             - kesai-transcoder
+        volumes:
+            - ./data/outputs:/outputs
+            - ./data/sqlite:/sqlite
+            - ./data/uploads:/uploads
 
-    kesai-transcoder-reverse-proxy:
+    reverse-proxy:
         image: nginx:stable-alpine
-        container_name: kesai-transcoder-reverse-proxy
+        container_name: reverse-proxy
         depends_on:
-            - kesai-transcoder-frontend
-            - kesai-transcoder-backend
+            - frontend
+            - backend
         ports:
             - '4000:80'
         volumes:
